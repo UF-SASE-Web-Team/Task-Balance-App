@@ -1,6 +1,4 @@
 # Task-Balance-App
-# AI-Advisor
-
 ## Frontend Setup
 ### Prerequisites
 - Node.js 18+ (LTS version recommended)
