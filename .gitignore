@@ -1,4 +1,29 @@
+# Node
 node_modules/
-
 dist/
-build/
+coverage/
+*.log
+npm-debug.log*
+
+# Env
+.env
+.env.*
+!.env.example
+
+# TypeScript
+*.tsbuildinfo
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Temp
+.tmp/
+.temp/
+*.swp
