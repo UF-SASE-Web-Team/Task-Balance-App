@@ -205,7 +205,7 @@ function getRelevantEvents(
 }
 
 // Main function that can be called by route
-export async function getICSFromUrl(
+export async function parseICSFromUrl(
   url: string,
   threshold: number
 ): Promise<[Metadata, Event[]]> {
@@ -225,9 +225,9 @@ export async function exampleUsage() {
   const exampleUrl = "https://ufl.instructure.com/feeds/calendars/user_OS48BY4iVXJ5mjhHSw8bHLq4tVRM0XfluCwIrrbV.ics";
   if (exampleUrl) {
     const currentDate: Date = new Date();
-    const [metadata, events] = await getICSFromUrl(exampleUrl, currentDate.getTime());
+    const [metadata, events] = await parseICSFromUrl(exampleUrl, currentDate.getTime());
     console.log(metadata);
-    console.log(events.map((e) => e.title));
+    console.log(JSON.parse(JSON.stringify(events.map((e) => e))));
   }
 }
 
