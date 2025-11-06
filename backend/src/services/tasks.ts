@@ -38,18 +38,6 @@ class Event {
     }
     return 0;
   }
-
-  isGreaterThan(other: Event): boolean {
-    return this.eventStart > other.eventStart;
-  }
-
-  isLessThan(other: Event): boolean {
-    return this.eventStart < other.eventStart;
-  }
-
-  isEqual(other: Event): boolean {
-    return this.uid === other.uid;
-  }
 }
 
 // Defines basic schema for metadata
@@ -163,52 +151,70 @@ function splitMetadata(rawText: string): ICSData {
   return metadata;
 }
 
-// Returns the metadata object from the dictionary
+// Transforms metadata dict to Metadata type and remvoes empty events
 function cleanMetadata(rawMetadata: ICSData): Metadata {
   return new Metadata(rawMetadata);
 }
 
-// Returns the events object from the dictionary
+// Transforms event dicts to Event type and removes empty events
 function cleanRawEvents(rawEvents: ICSData[]): Event[] {
   return rawEvents.filter((e) => Object.keys(e).length > 0).map((e) => new Event(e));
 }
 
-// Sort events using comparison operators in event file
-function sortEvents(events: Event[]): Event[] {
-  // Bubble sort
-  for (let i = 0; i < events.length; i++) {
-    for (let j = 0; j < events.length - 1; j++) {
-      if (events[j + 1].isGreaterThan(events[j])) {
-        const temp = events[j];
-        events[j] = events[j + 1];
-        events[j + 1] = temp;
-      }
-    }
+// Function that defines what to sort the events by for typescript sort
+function sortEventsByParams(first: Event, second: Event) {
+  // Sorts by eventStart descending by timestamp
+  if (second.eventStart !== first.eventStart) {
+    return (second.eventStart - first.eventStart);
   }
+  // Sorts by eventEnd descending by timestamo
+  if (second.eventEnd !== second.eventEnd) {
+    return (second.eventEnd - first.eventEnd);
+  }
+  // Sorts by title ascending
+  return first.title.localeCompare(second.title); 
+}
+
+// This is the actual function you call to sort events
+function sortEvents(events: Event[]): Event[] {
+  events.sort((first, second) => 
+    sortEventsByParams(first, second)); 
   return events;
 }
 
-// Filters events so that we only get the ones before a certain timestamp
-function getRelevantEvents(
-  sortedEvents: Event[],
-  threshold: number
-): Event[] {
-  const relevantEvents: Event[] = [];
-  let index = 0;
-
-  while (index < sortedEvents.length && sortedEvents[index].eventStart > threshold) {
-    relevantEvents.push(sortedEvents[index]);
-    index++;
+// Binary sort to find the specific timestamp
+function binarySearch(list: Event[], threshold: number, index: number) {
+  if (list.length <= 1) {
+    return index;
   }
+  const middleIndex = Math.floor(list.length / 2);
+  if (threshold <= list[middleIndex].eventStart) {
+    return binarySearch(
+      list=list.slice(middleIndex, list.length),
+      threshold=threshold,
+      index=index + middleIndex
+    )
+  } else {
+    return binarySearch(
+      list=list.slice(0, middleIndex),
+      threshold=threshold,
+      index=index
+    )
+  }
+}
 
-  return relevantEvents;
+// Filters events so that we only get the ones before a certain timestamp
+function getRelevantEvents(sortedEvents: Event[], threshold: number): Event[] {
+  let relevant_index = binarySearch(sortedEvents, threshold, 0);
+  return sortedEvents.slice(0, relevant_index);
 }
 
 // Main function that can be called by route
 export async function parseICSFromUrl(
-  url: string,
+  user_id: string,
   threshold: number
 ): Promise<[Metadata, Event[]]> {
+  const url = `https://ufl.instructure.com/feeds/calendars/${user_id}.ics`;
   const [calendarRaw, eventsRaw] = await getRawICSContent(url);
   const rawSplitCalendar = splitMetadata(calendarRaw);
   const rawSplitEvents = splitICSContent(eventsRaw);
@@ -220,13 +226,10 @@ export async function parseICSFromUrl(
 }
 
 // Example usage
-export async function exampleUsage() {
-  console.log("Test");
-  const exampleUrl = "https://ufl.instructure.com/feeds/calendars/user_OS48BY4iVXJ5mjhHSw8bHLq4tVRM0XfluCwIrrbV.ics";
-  if (exampleUrl) {
-    const currentDate: Date = new Date();
-    const [metadata, events] = await parseICSFromUrl(exampleUrl, currentDate.getTime());
-    console.log(metadata);
-    console.log(JSON.parse(JSON.stringify(events.map((e) => e))));
-  }
-}
+// async function exampleUsage() {
+//   const exampleUserID = "user_OS48BY4iVXJ5mjhHSw8bHLq4tVRM0XfluCwIrrbV";
+//   console.log(await parseICSFromUrl(exampleUserID, 1763006340001));
+// }
+
+// node --inspect src/services/tasks.ts
+// exampleUsage()
