@@ -186,8 +186,6 @@ export default function HomeScreen() {
             );
           }}
         />
-
-          
       </View>
 
       <ThemedText>
@@ -195,7 +193,11 @@ export default function HomeScreen() {
       </ThemedText>
 
 
-      <View style={styles.standInForProgressBar} />
+      <View style={styles.standInForProgressBar}>
+        <ThemedText>
+          stand in for progress bar
+        </ThemedText>
+      </View>
 
     </SafeAreaView>
     
@@ -211,7 +213,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderWidth: 8,
     borderColor: '#AEDF0D',
-    padding:5,
   },
 
   titleContainer: {
@@ -256,6 +257,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginVertical: distanceBetweenAssignmentButtons,
+    elevation: 8,
   },
 
   leftAlignButton: {
