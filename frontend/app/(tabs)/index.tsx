@@ -206,12 +206,12 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   standInForProgressBar: {
-    width: windowWidth,
-    height: windowHeight * 0.0515,
+    width: windowWidth*0.95,
+    height: windowHeight * 0.055,
     backgroundColor: '#ffffffff',
     top: windowHeight * 0.62,
     alignSelf: 'center',
-    borderWidth: 8,
+    borderBottomWidth: 10,
     borderColor: '#AEDF0D',
   },
 
