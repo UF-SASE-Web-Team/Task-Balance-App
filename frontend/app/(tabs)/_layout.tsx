@@ -24,20 +24,20 @@ export default function TabLayout() {
       }}>
 
       <Tabs.Screen
-        name="friends"
-        options={{
-          title: 'Friends',
-          tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="smile" color={color} />,
-        }}
-      />
-
-      <Tabs.Screen
         name="leaderboard"
         options={{
           title: 'Leaderboard',
           tabBarIcon: ({ color }) => <FontAwesome6 name="medal" size={24} color={color} />,
         }}
         />
+
+      <Tabs.Screen
+        name="friends"
+        options={{
+          title: 'Friends',
+          tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="smile" color={color} />,
+        }}
+      />
 
         <Tabs.Screen
         name="index"
@@ -48,18 +48,18 @@ export default function TabLayout() {
         />
 
         <Tabs.Screen
-        name="quests"
+        name="shop"
         options={{
-          title: 'Quests',
-          tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="feather" color={color} />,
+          title: 'Shop',
+          tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="gift" color={color} />,
         }}
         />
 
         <Tabs.Screen
-        name="studyTools"
+        name="gamble"
         options={{
-          title: 'Study Tools',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Gacha',
+          tabBarIcon: ({ color }) => <FontAwesome6 size={24} name="coins" color={color} />,
         }}
         />
         
