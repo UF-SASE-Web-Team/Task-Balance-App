@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { Text, Animated, Dimensions, View, Platform, StyleSheet, ScrollView, Pressable, FlatList } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, Component } from 'react';
 
 import { HelloWave } from '@/components/hello-wave';
 import { ThemedText } from '@/components/themed-text';
@@ -158,6 +158,8 @@ const assignmentDataClass1 = [
 ]
 
 export default function HomeScreen() {
+  
+
   // variable lets us access dataset
   const [data, setData] = useState(assignmentDataClass1);
   // find earliest incompleted assignment
@@ -174,6 +176,7 @@ export default function HomeScreen() {
   const openAssignmentInfo = (item: any) => {
     setSelectedAssignment(item);
     setIsInfoVisible(true);
+
   };
 
   const closeAssignmentInfo = () => {
@@ -237,12 +240,12 @@ export default function HomeScreen() {
                   />
               )} {/* IF button is the earliest incompleted assignment, but lil player icon on it */}
 
-              <ThemedText style={{fontWeight: "bold"}}>
+              <Text numberOfLines={2} style={[styles.buttonTitle, { fontWeight: "bold"}, ]}>
                 {item.title}
-              </ThemedText>
-              <ThemedText>
+              </Text>
+              <Text style={styles.buttonDate}>
                 {item.date}
-              </ThemedText>
+              </Text>
               
             </Pressable>
             );
@@ -256,6 +259,7 @@ export default function HomeScreen() {
         <Pressable style={styles.closeButton} onPress={closeAssignmentInfo}>
           <FontAwesome6 size={24} name="window-close" color="gray"/>
         </Pressable>
+
         <ScrollView>
           <Text style={styles.infoTitle}>{selectedAssignment?.title}</Text>
           <Text style={styles.infoDate}>{selectedAssignment?.date}</Text>
@@ -284,7 +288,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderBottomWidth: 10,
     borderColor: '#AEDF0D',
-    zIndex: 2,
+    zIndex: 4,
   },
 
   titleContainer: {
@@ -313,7 +317,7 @@ const styles = StyleSheet.create({
     height: windowWidth*2,
     borderRadius: (windowWidth*2) / 2,
     backgroundColor: '#AEDF0D',
-    top: windowHeight / 2.3,
+    top: (windowHeight / 2.3),
     left: -windowWidth / 2,
     position: 'absolute',
     
@@ -330,6 +334,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginVertical: distanceBetweenAssignmentButtons,
     elevation: 8,
+  },
+
+  buttonTitle:{
+    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingHorizontal: (windowHeight*0.01),
+  },
+
+  buttonDate:{
+    textAlign: 'center',
+    fontSize: 15,
   },
 
   leftAlignButton: {
